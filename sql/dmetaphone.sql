@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION pg_search_dmetaphone(text) RETURNS text LANGUAGE SQL IMMUTABLE STRICT AS $function$
-  SELECT array_to_string(ARRAY(SELECT dmetaphone(unnest(regexp_split_to_array($1, E'\\\\s+')))), ' ')
+CREATE OR REPLACE FUNCTION x.pg_search_dmetaphone(text) RETURNS text LANGUAGE SQL IMMUTABLE STRICT AS $function$
+  SELECT string_agg(w, ' ')
+  FROM (SELECT dmetaphone(unnest(string_to_array(regexp_replace($1, E'\\s+', ' ', 'g'), ' '))) AS w) x
 $function$;
-
